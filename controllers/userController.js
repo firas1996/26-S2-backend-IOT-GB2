@@ -32,3 +32,25 @@ exports.getUsers = async (req, res) => {
     });
   }
 };
+
+exports.getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      res.status(404).json({
+        message: "User does not exist !!!",
+      });
+    }
+    res.status(200).json({
+      message: "User Fetched !!",
+      data: {
+        user,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Fail !!",
+      error: error,
+    });
+  }
+};
