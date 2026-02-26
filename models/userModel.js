@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcryptjs = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -35,7 +36,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "user"],
+    enum: ["admin", "user", "test1", "test2"],
     default: "user",
   },
   created_at: {
@@ -46,6 +47,14 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+});
+
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcryptjs.hash(this.password, 20);
+    this.confirm_password = undefined;
+  }
+  return next;
 });
 
 const User = mongoose.model("User", userSchema);
