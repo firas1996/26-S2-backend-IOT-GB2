@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "The password is required !!!!"],
     minlength: 8,
-    select: false,
+    selected: false,
     // validate: [validator.isStrongPassword, "your pass is too weak !!!"],
   },
   confirm_password: {

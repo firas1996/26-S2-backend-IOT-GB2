@@ -27,6 +27,7 @@ exports.signIn = async (req, res) => {
       });
     }
     const user = await User.findOne({ email }).select("password");
+    console.log(user);
     if (!user || user.checkPass(password, user.password)) {
       res.status(400).json({
         message: "Email or password are incorrect !!!!",
