@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "The password is required !!!!"],
     minlength: 8,
+    select: false,
     // validate: [validator.isStrongPassword, "your pass is too weak !!!"],
   },
   confirm_password: {
@@ -51,11 +52,15 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = await bcryptjs.hash(this.password, 20);
+    this.password = await bcryptjs.hash(this.password, 12);
     this.confirm_password = undefined;
   }
   return next;
 });
+
+userSchema.methods.checkPass = async function (pass, hPass) {
+  return await bcryptjs.compare(pass, hPass);
+};
 
 const User = mongoose.model("User", userSchema);
 
